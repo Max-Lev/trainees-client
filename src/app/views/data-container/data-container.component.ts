@@ -1,5 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, AfterViewInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { ApiService } from './services/api/api.service';
 import { TraineesModel } from 'src/app/models/trainees.model';
 
@@ -26,8 +25,7 @@ export class DataContainerComponent implements OnInit, AfterViewInit {
 
   getTrainees() {
     this.apiService.getTrainees().subscribe((trainees: TraineesModel[]) => {
-      console.log(trainees);
-      this.traineesDataSource = Object.assign({}, ...trainees);
+      this.traineesDataSource = trainees.map(trainee => Object.assign({}, trainee));
     });
   };
 

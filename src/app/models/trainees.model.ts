@@ -23,16 +23,16 @@ export class TraineesModel implements ITrainees {
     Country: string;
     Zip: number;
     constructor(model: TraineesModel) {
-        this.Id = model.Id;
-        this.Name = model.Name;
-        this.Date = model.Date;
-        this.Grade = model.Grade;
-        this.Subject = model.Subject;
-        this.Email = model.Email;
-        this.Address = model.Address;
-        this.City = model.City;
-        this.Country = model.Country;
-        this.Zip = model.Zip;
+        this.Id = model['id'];
+        this.Name = model['name'];
+        this.Date = model['date'];
+        this.Grade = model['grade'];
+        this.Subject = model['subject'];
+        this.Email = model['email'];
+        this.Address = model['address'];
+        this.City = model['city'];
+        this.Country = model['country'];
+        this.Zip = model['zip'];
     };
 
     getViewModel() {
