@@ -20,19 +20,33 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
 
   constructor(private ref: ChangeDetectorRef) { };
 
-  ngOnInit() {
-
-  };
+  ngOnInit() { };
 
   ngAfterViewInit(): void {
     this.getSortState();
   };
 
   ngOnChanges(changes: SimpleChanges): void {
-
     this.dataSource = new MatTableDataSource(this.traineesDataSource);
     this.dataSource.sort = this.sort;
+  };
 
+
+  applyFilter(filterValue: string) {
+    this.filterById(filterValue);
+  };
+
+  filterById(filterValue: string) {
+    // this.dataSource.filter = filterValue.trim().toLowerCase();
+    const list = this.traineesDataSource.filter((filterItem: TraineesModel) => {
+      if (filterItem.Id === Number(filterValue)) {
+        return filterItem;
+      }
+      else if (filterValue === "" || filterValue.length === 0 || null || undefined) {
+        return filterItem;
+      }
+    });
+    this.dataSource = new MatTableDataSource(list);
   };
 
   getSortState() {

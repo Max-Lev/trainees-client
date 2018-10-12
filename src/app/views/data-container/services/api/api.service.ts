@@ -9,20 +9,21 @@ import { TraineesModel } from 'src/app/models/trainees.model';
 })
 export class ApiService {
 
-  traineesDataSource: TraineesModel[] = [];
-
   constructor(private http: HttpClient) {
 
   };
 
   getTrainees(): Observable<TraineesModel[]> {
+
+    const traineesDataSource: TraineesModel[] = [];
+
     return Observable.create((obs: Observer<TraineesModel[]>) => {
 
       this.http.get(environment.apiUrl).subscribe((trainees: TraineesModel[]) => {
 
-        trainees.map((trainee) => { this.traineesDataSource.push(new TraineesModel(trainee)); });
+        trainees.map((trainee) => { traineesDataSource.push(new TraineesModel(trainee)); });
 
-        obs.next(this.traineesDataSource);
+        obs.next(traineesDataSource);
 
         return trainees;
 

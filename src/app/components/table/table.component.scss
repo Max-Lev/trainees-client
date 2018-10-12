@@ -1,4 +1,16 @@
 app-table {
     display: flex;
     flex-direction: column;
+    .search-container {
+        display: flex;
+        flex-direction: row;
+        align-items: baseline;
+        align-self: center;
+        .search-title {
+            padding: 0 .5rem;
+        }
+        button[type="button"] {
+            margin-left: .5rem;
+        }
+    }
 }

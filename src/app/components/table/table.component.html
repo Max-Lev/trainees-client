@@ -1,4 +1,12 @@
-<!-- <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8"> -->
+<section class="search-container">
+  <span class="search-title">Filter</span>
+  <mat-form-field>
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="ID:###">
+  </mat-form-field>
+  <button type="button" matButton mat-stroked-button>Add</button>
+  <button type="button" mat-stroked-button>Remove</button>
+</section>
+
 <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
 
   <!-- Position Column -->
