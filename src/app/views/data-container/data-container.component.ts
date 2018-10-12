@@ -4,8 +4,7 @@ import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-data-container',
   templateUrl: './data-container.component.html',
-  styleUrls: ['./data-container.component.scss'],
-  encapsulation:ViewEncapsulation.None
+  styleUrls: ['./data-container.component.scss']
 })
 export class DataContainerComponent implements OnInit {
 

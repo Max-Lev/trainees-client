@@ -2,8 +2,10 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DataContainerComponent } from './data-container.component';
 import { Routes, RouterModule } from '@angular/router';
-import { MatCardModule, MatInputModule, MatButtonModule } from '@angular/material';
-import {MatFormFieldModule} from '@angular/material/form-field';
+import { MatCardModule, MatInputModule, MatButtonModule, MatSortModule } from '@angular/material';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatTableModule } from '@angular/material/table';
+import { TableComponent } from 'src/app/components/table/table.component';
 const routes: Routes = [
   {
     path: '', component: DataContainerComponent
@@ -18,7 +20,12 @@ const routes: Routes = [
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    MatSortModule,
+    MatTableModule
   ],
-  declarations: [DataContainerComponent]
+  declarations: [
+    DataContainerComponent,
+    TableComponent
+  ]
 })
 export class DataContainerModule { }
