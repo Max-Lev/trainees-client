@@ -1,20 +1,35 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, AfterViewInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { ApiService } from './services/api/api.service';
+import { TraineesModel } from 'src/app/models/trainees.model';
 
 @Component({
   selector: 'app-data-container',
   templateUrl: './data-container.component.html',
   styleUrls: ['./data-container.component.scss']
 })
-export class DataContainerComponent implements OnInit {
+export class DataContainerComponent implements OnInit, AfterViewInit {
 
-  constructor(private http: HttpClient) {
-    this.http.get("https://localhost:5001/api/trainees").subscribe((data) => {
-      console.log(data)
-    });
-  }
+  traineesDataSource: TraineesModel[] = [];
+
+  constructor(private apiService: ApiService) {
+
+  };
 
   ngOnInit() {
-  }
+    this.getTrainees();
+  };
+
+  ngAfterViewInit(): void {
+
+  };
+
+  getTrainees() {
+    this.apiService.getTrainees().subscribe((trainees: TraineesModel[]) => {
+      console.log(trainees);
+      this.traineesDataSource = Object.assign({}, ...trainees);
+    });
+  };
+
 
 }

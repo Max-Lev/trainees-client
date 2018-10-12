@@ -6,6 +6,7 @@ import { MatCardModule, MatInputModule, MatButtonModule, MatSortModule } from '@
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatTableModule } from '@angular/material/table';
 import { TableComponent } from 'src/app/components/table/table.component';
+import { ApiService } from './services/api/api.service';
 const routes: Routes = [
   {
     path: '', component: DataContainerComponent
@@ -26,6 +27,7 @@ const routes: Routes = [
   declarations: [
     DataContainerComponent,
     TableComponent
-  ]
+  ],
+  providers: [ApiService]
 })
 export class DataContainerModule { }
