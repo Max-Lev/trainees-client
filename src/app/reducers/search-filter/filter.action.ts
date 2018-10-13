@@ -1,5 +1,6 @@
 const SEARCH_FILTER_ACTIVE: string = `[SEARCH_FILTER] SEARCH_FILTER_ACTIVE`;
 const SEARCH_FILTER_RESET: string = `[SEARCH_FILTER] SEARCH_FILTER_RESET`;
+const SEARCH_FILTER_DATA: string = `[SEARCH_FILTER] SEARCH_FILTER_DATA`;
 
 export interface IFilterState {
     type: string;
@@ -34,5 +35,6 @@ export class FilterActionState implements IFilterState {
 
 export const FilterActionList = {
     SEARCH_FILTER_ACTIVE,
-    SEARCH_FILTER_RESET
+    SEARCH_FILTER_RESET,
+    SEARCH_FILTER_DATA
 }

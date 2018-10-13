@@ -13,7 +13,7 @@ export class UtilService {
 
     let list = [];
 
-    if (traineesDataSource.length !== 0) {
+    if (traineesDataSource !== undefined && traineesDataSource.length !== 0) {
       list = traineesDataSource.filter((filterItem: TraineesModel) => {
         if (filterItem.id === Number(filterValue)) {
           return filterItem;

@@ -20,13 +20,11 @@ export class AppComponent implements AfterViewInit {
 
   constructor() {
     this.asyncTabs = Observable.create((observer: Observer<ExampleTab[]>) => {
-      // setTimeout(() => {
       observer.next([
         { path: '', label: 'Data', isActive: false },
         { path: 'analysis', label: 'Analysis', isActive: false },
         { path: 'monitor', label: 'Monitor', isActive: false },
       ]);
-      // }, 1000);
     });
   };
 

@@ -11,6 +11,8 @@ import { UtilService } from './services/util.service';
 import { FormsModule } from '@angular/forms';
 import { MatListModule } from '@angular/material/list';
 import { TraineeDetailsComponent } from 'src/app/components/trainee-details/trainee-details.component';
+import { StoreModule } from '@ngrx/store';
+import { reducers, metaReducers } from 'src/app/reducers';
 const routes: Routes = [
   {
     path: '', component: DataContainerComponent
@@ -29,7 +31,8 @@ const routes: Routes = [
     MatTableModule,
     FormsModule,
     MatListModule,
-    MatToolbarModule
+    MatToolbarModule,
+    // StoreModule.forRoot(reducers, { metaReducers }),
   ],
   declarations: [
     DataContainerComponent,

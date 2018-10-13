@@ -3,7 +3,7 @@
   <mat-form-field>
     <input matInput (keyup)="searchFilterHandler($event.target.value)" placeholder="ID:###" [(ngModel)]="tableState.filterValue">
   </mat-form-field>
-  <button type="button" matButton mat-stroked-button>Add</button>
+  <button (click)="addTrainee()" type="button" matButton mat-stroked-button>Add</button>
   <button type="button" mat-stroked-button>Remove</button>
 </section>
 
@@ -44,14 +44,16 @@
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr (click)="editTraineeDetails(row)" mat-row *matRowDef="let row; columns: displayedColumns;let i = index;"></tr>
+      <tr (click)="editTraineeDetails(row,row.id)" mat-row *matRowDef="let row; columns: displayedColumns;let i = index;"></tr>
 
     </table>
 
   </section>
 
-  <ng-container *ngIf="traineeSelectedID!==-1">
+  <ng-container *ngIf="traineeSelectedID!==-1 && !add">
+    <!-- <app-trainee-details (change)="changeHandler($event)" [traineeDetails]="traineeDetails"></app-trainee-details> -->
     <app-trainee-details [traineeDetails]="traineeDetails"></app-trainee-details>
   </ng-container>
+
 
 </section>

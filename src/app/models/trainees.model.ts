@@ -1,5 +1,5 @@
 export interface ITrainees {
-    id: number;
+    id?: number;
     name: string;
     date: string;
     grade: number;
@@ -12,7 +12,7 @@ export interface ITrainees {
 };
 
 export class TraineesModel implements ITrainees {
-    id: number;
+    id?: number;
     name: string;
     date: string;
     grade: number;

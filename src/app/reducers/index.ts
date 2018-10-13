@@ -6,15 +6,19 @@ import {
   MetaReducer
 } from '@ngrx/store';
 import { environment } from '../../environments/environment';
-import { IFilterState, FilterActionState } from './actions/filter.action';
-import { FilterReducer } from './actions/filter.reducer';
+import { IFilterState, FilterActionState } from './search-filter/filter.action';
+import { FilterReducer } from './search-filter/filter.reducer';
+import { IAddEditState } from './add-edit/add-edit.actions';
+import { AddEditReducer } from './add-edit/add-edit.reducer';
 
 export interface AppState {
-  filterState: FilterActionState;
+  filterState: IFilterState;
+  addEditState:IAddEditState;
 };
 
 export const reducers: ActionReducerMap<any> = {
-  filterReducer: FilterReducer
+  filterReducer: FilterReducer,
+  addEditReducer:AddEditReducer
 };
 
 
