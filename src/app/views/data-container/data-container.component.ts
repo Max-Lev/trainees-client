@@ -24,11 +24,13 @@ export class DataContainerComponent implements OnInit, AfterViewInit {
   constructor(private store: Store<AppState>, private apiService: ApiService) {
 
     this.store.pipe(select('filterReducer')).subscribe((state: FilterActionState) => {
-      this.filterValue = state.payload.filterValue;
-      this.tableState = Object.assign({}, this.tableState, {
-        traineesDataSource: this.traineesDataSource,
-        filterValue: this.filterValue
-      });
+
+      this.traineesDataSource = state.payload['traineesDataSource'];
+      
+      this.filterValue = state.payload['filterValue'];
+
+      this.setTableState();
+
     });
 
   };
@@ -42,15 +44,18 @@ export class DataContainerComponent implements OnInit, AfterViewInit {
   };
 
   getTraineesApiAction() {
+
     this.apiService.getTrainees().subscribe((trainees: TraineesModel[]) => {
+
       this.traineesDataSource = trainees.map(trainee => Object.assign({}, trainee));
 
-      this.tableState = Object.assign({}, this.tableState, {
-        traineesDataSource: this.traineesDataSource,
-        filterValue: this.filterValue
-      });
+      this.setTableState();
 
     });
+  };
+
+  setTableState() {
+    this.tableState = Object.assign({}, this.tableState, { traineesDataSource: this.traineesDataSource, filterValue: this.filterValue });
   };
 
 

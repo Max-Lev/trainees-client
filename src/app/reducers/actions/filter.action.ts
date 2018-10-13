@@ -14,7 +14,10 @@ export class FilterInitialState implements IFilterState {
     };
     constructor() {
         this.type = SEARCH_FILTER_RESET;
-        this.payload = [];
+        this.payload = {
+            filterValue: '',
+            traineesDataSource: []
+        };
     }
 }
 export class FilterActionState implements IFilterState {
