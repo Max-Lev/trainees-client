@@ -1,47 +1,53 @@
 export interface ITrainees {
-    Id: number;
-    Name: string;
-    Date: string;
-    Grade: number;
-    Subject: string;
-    Email: string;
-    Address: string;
-    City: string;
-    Country: string;
-    Zip: number;
+    id: number;
+    name: string;
+    date: string;
+    grade: number;
+    subject: string;
+    email: string;
+    address: string;
+    city: string;
+    country: string;
+    zip: number;
 };
 
 export class TraineesModel implements ITrainees {
-    Id: number;
-    Name: string;
-    Date: string;
-    Grade: number;
-    Subject: string;
-    Email: string;
-    Address: string;
-    City: string;
-    Country: string;
-    Zip: number;
+    id: number;
+    name: string;
+    date: string;
+    grade: number;
+    subject: string;
+    email: string;
+    address: string;
+    city: string;
+    country: string;
+    zip: number;
+    isSelected: boolean;
     constructor(model: TraineesModel) {
-        this.Id = model['id'];
-        this.Name = model['name'];
-        this.Date = model['date'];
-        this.Grade = model['grade'];
-        this.Subject = model['subject'];
-        this.Email = model['email'];
-        this.Address = model['address'];
-        this.City = model['city'];
-        this.Country = model['country'];
-        this.Zip = model['zip'];
+        this.id = model['id'];
+        this.name = model['name'];
+        this.date = model['date'];
+        this.grade = model['grade'];
+        this.subject = model['subject'];
+        this.email = model['email'];
+        this.address = model['address'];
+        this.city = model['city'];
+        this.country = model['country'];
+        this.zip = model['zip'];
+        this.setSelected();
+    };
+
+    setSelected() {
+        this.isSelected = false;
     };
 
     getViewModel() {
         return {
-            Id: this.Id,
-            Name: this.Name,
-            Date: this.Date,
-            Grade: this.Grade,
-            Subject: this.Subject
+            id: this.id,
+            name: this.name,
+            date: this.date,
+            grade: this.grade,
+            subject: this.subject
         }
     };
 

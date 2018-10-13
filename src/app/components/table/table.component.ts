@@ -17,15 +17,15 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
 
   displayedColumns: string[] = ['Id', 'Name', 'Date', 'Grade', 'Subject'];
 
-  traineesDataSource: TraineesModel[] = [];
-
   dataSource = new MatTableDataSource([]);
 
   @ViewChild(MatSort) sort: MatSort;
 
-  filterValue: string;
-
   @Input() tableState: any;
+
+  traineeDetails: TraineesModel;
+
+  traineeSelectedID: number = -1;
 
   constructor(private store: Store<AppState>, private ref: ChangeDetectorRef, private utilService: UtilService) {
 
@@ -43,34 +43,32 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
   };
 
   setState() {
-    this.filterValue = this.tableState.filterValue;
 
-    this.traineesDataSource = this.tableState.traineesDataSource;
-
-    this.dataSource = new MatTableDataSource(this.traineesDataSource);
-
+    this.dataSource = new MatTableDataSource(this.tableState.traineesDataSource);
     this.dataSource.sort = this.sort;
 
     if (this.tableState.filterValue !== undefined && !'') {
-      this.dataSource = this.utilService.filterById(this.filterValue, this.traineesDataSource);
+      this.dataSource = this.utilService.filterById(this.tableState.filterValue, this.tableState.traineesDataSource);
     }
-    console.log('tableState: ', this.tableState);
+
   };
 
   searchFilterHandler(searchFilterHandler: string) {
-    this.dataSource = this.utilService.filterById(searchFilterHandler, this.traineesDataSource);
+    this.dataSource = this.utilService.filterById(searchFilterHandler, this.tableState.traineesDataSource);
     this.searchFilterActionHandler(searchFilterHandler);
   };
 
   searchFilterActionHandler(filterValue: string) {
-    this.store.dispatch(new FilterActionState(FilterActionList.SEARCH_FILTER_ACTIVE, {
-      traineesDataSource: this.traineesDataSource,
-      filterValue: filterValue
-    }));
+    this.store.dispatch(new FilterActionState(FilterActionList.SEARCH_FILTER_ACTIVE, { traineesDataSource: this.tableState.traineesDataSource, filterValue: filterValue }));
   };
 
   editTraineeDetails(trainee: TraineesModel) {
-    debugger;
+    if (this.traineeSelectedID !== trainee.id) {
+      this.traineeSelectedID = trainee.id;
+      this.traineeDetails = new TraineesModel(trainee);
+    } else {
+      this.traineeSelectedID = -1;
+    }
   }
 
   tableSortState$() {

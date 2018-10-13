@@ -1,0 +1,14 @@
+:host {
+    display: flex;
+    flex: .2;
+    .trainee-details-container {
+        display: flex;
+        flex: 1;
+        mat-card {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            padding: 0;
+        }
+    }
+}
