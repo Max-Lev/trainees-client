@@ -2,57 +2,34 @@
   <mat-card>
 
     <mat-list dense>
+      
       <mat-list-item>
         Details
       </mat-list-item>
 
-      <mat-list-item>
-        ID:{{traineeDetails.id}}
-      </mat-list-item>
+      <mat-list-item *ngFor="let prop of detailsView.k;let i = index;" (click)="index=i">
 
-      <mat-list-item (click)="index=1" (click)="edit(traineeDetails,'name')">
-        <ng-container *ngIf="index!==1">
-          Name:{{traineeDetails.name}}
+        <!-- display mode -->
+        <ng-container *ngIf="index!==i">
+          {{prop | titlecase}}:{{traineeDetails[prop]}}
         </ng-container>
-        <ng-container *ngIf="index===1">
+        <!-- display mode -->
+
+        <!-- edit mode -->
+        <ng-container *ngIf="index!==0 && index===i">
           <mat-form-field>
-            <input matInput placeholder="Name" (ngModelChange)="onChange(traineeDetails,$event,'name')" [(ngModel)]="traineeDetails.name">
+            <input matInput [placeholder]="prop" (ngModelChange)="onChange(traineeDetails,$event,prop)" [(ngModel)]="traineeDetails[prop]">
           </mat-form-field>
         </ng-container>
+        <!-- edit mode -->
+
+        <!-- disable edit ID -->
+        <ng-container *ngIf="index===0 && index===i">
+          {{prop | titlecase}}:{{traineeDetails[prop]}}
+        </ng-container>
+        <!-- disable edit ID -->
       </mat-list-item>
 
-      <mat-list-item (click)="index=2" (click)="edit(traineeDetails,'grade')">
-        <ng-container *ngIf="index!==2">
-          Grade:{{traineeDetails.grade}}
-        </ng-container>
-        <ng-container *ngIf="index===2">
-          <mat-form-field>
-            <input matInput placeholder="Grade" (ngModelChange)="onChange(traineeDetails,$event,'grade')" [(ngModel)]="traineeDetails.grade">
-          </mat-form-field>
-        </ng-container>
-      </mat-list-item>
-
-      <mat-list-item>
-        Email:{{traineeDetails.email}}
-      </mat-list-item>
-      <mat-list-item>
-        Date Joined:{{traineeDetails.date}}
-      </mat-list-item>
-      <mat-list-item>
-        Address:{{traineeDetails.address}}
-      </mat-list-item>
-      <mat-list-item>
-        City:{{traineeDetails.city}}
-      </mat-list-item>
-      <mat-list-item>
-        Country:{{traineeDetails.country}}
-      </mat-list-item>
-      <mat-list-item>
-        Zip:{{traineeDetails.zip}}
-      </mat-list-item>
-      <mat-list-item>
-        Subject:{{traineeDetails.subject}}
-      </mat-list-item>
     </mat-list>
 
   </mat-card>

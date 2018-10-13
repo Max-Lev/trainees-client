@@ -10,7 +10,6 @@ export function FilterReducer(state = new FilterInitialState(), action: Action) 
                 ...action,
                 payload: action['payload']
             };
-            console.log('active: ', active);
             return active;
         case FilterActionList.SEARCH_FILTER_DATA:
             const data = {
@@ -18,7 +17,6 @@ export function FilterReducer(state = new FilterInitialState(), action: Action) 
                 ...action,
                 payload: action['payload']
             };
-            console.log('data: ', data);
             return data;
         default:
             return state;

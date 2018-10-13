@@ -72,9 +72,11 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
     } else {
       this.traineeSelectedID = -1;
     }
-  }
+  };
 
+  addTrainee(){
 
+  };
 
   tableSortState$() {
     this.sort.sortChange.subscribe((state) => {

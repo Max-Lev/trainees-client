@@ -19,7 +19,7 @@ export class TraineeDetailsComponent implements OnInit, OnChanges {
 
   @Input() traineeDetails: TraineesModel;
 
-  // @Output() change: EventEmitter<TraineeModelEmitter> = new EventEmitter();
+  detailsView: any = { k: [], v: [] };
 
   constructor(private store: Store<AppState>, private ref: ChangeDetectorRef) { }
 
@@ -29,21 +29,18 @@ export class TraineeDetailsComponent implements OnInit, OnChanges {
 
   ngOnChanges(): void {
 
-  };
+    this.detailsView = { k: [], v: [] };
+    const k: string[] = Object.keys(this.traineeDetails);
+    k.filter((prop) => {
+      this.detailsView.k.push(prop);
+      this.detailsView.v.push(this.traineeDetails[prop]);
+    });
 
-  edit(trainee: TraineesModel, prop: string) {
-    console.log('edit state active: ', trainee, prop)
-    // this.ref.markForCheck();
-    // this.ref.detectChanges();
-    // this.store.dispatch(new AddEditState(AddEditActions.EDIT_ACTIVE, true, false));
-  }
+  };
 
   onChange(traineeDetails: TraineesModel, value: string, prop: string) {
     console.log('change')
     this.store.dispatch(new AddEditState(AddEditActions.EDIT_ACTIVE, true, false, traineeDetails, value, prop));
-    // debugger;
-    // const data: TraineeModelEmitter = { traineeDetails: traineeDetails, value: value, prop: prop };
-    // this.change.emit(data);
   }
 
 }

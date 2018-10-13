@@ -34,13 +34,7 @@ export class TraineesModel implements ITrainees {
         this.city = model['city'];
         this.country = model['country'];
         this.zip = model['zip'];
-        this.setSelected();
     };
-
-    setSelected() {
-        this.isSelected = false;
-    };
-
     getViewModel() {
         return {
             id: this.id,
