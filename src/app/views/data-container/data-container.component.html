@@ -1,7 +1,9 @@
 <mat-card class="actions-card-container">
   <form novalidate>
 
-    <app-table [traineesDataSource]="traineesDataSource"></app-table>
+      <!-- [traineesDataSource]="traineesDataSource" [filterValue]="filterValue" -->
+    <app-table 
+    [tableState]="tableState"></app-table>
 
   </form>
 </mat-card>
