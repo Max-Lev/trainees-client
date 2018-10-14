@@ -10,7 +10,6 @@ export function AddReducer(state = new AddInitialState(), action: IAddState) {
                 ...action,
                 payload: { ...action.payload }
             };
-            // console.log('add active: ', active);
             return active;
 
         case AddActionsList.ADD_SAVE:
@@ -19,11 +18,9 @@ export function AddReducer(state = new AddInitialState(), action: IAddState) {
                 ...action,
                 payload: { ...action.payload }
             };
-            // console.log('add save: ', save);
             return save;
 
         default:
-            // console.log('add initial: ', state)
             return state;
     };
 

@@ -7,7 +7,7 @@
         Details
       </mat-list-item>
 
-      <mat-list-item *ngFor="let prop of detailsView.k;let i = index;" (click)="index=i">
+      <mat-list-item *ngFor="let prop of viewObj.k;let i = index;" (click)="index=i">
 
         <!-- display mode -->
         <ng-container *ngIf="index!==i">

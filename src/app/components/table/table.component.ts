@@ -1,16 +1,21 @@
 import { Component, OnInit, ViewChild, AfterViewInit, ViewEncapsulation, OnChanges, Input, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
 import { MatSort, MatTableDataSource, } from '@angular/material';
 import { TraineesModel, ITrainees } from 'src/app/models/trainees.model';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { FilterActionState, FilterActionList } from 'src/app/reducers/search-filter/filter.action';
 import { AppState } from 'src/app/reducers';
 import { UtilService } from 'src/app/views/data-container/services/util.service';
 import { IEditState } from 'src/app/reducers/edit/edit.actions';
-import { ITableState } from 'src/app/views/data-container/data-container.component';
+import { ITableDataContainer } from 'src/app/views/data-container/data-container.component';
 import { AddState, AddActionsList } from 'src/app/reducers/add/add.actions';
 import { ApiService } from 'src/app/views/data-container/services/api/api.service';
 
-
+export const modeOptions = {
+  editState: 'editState', 
+  addState: 'addState',
+  closed: 'closed', 
+  saveMode: { isSave: false }
+};
 
 @Component({
   selector: 'app-table',
@@ -26,17 +31,15 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
 
   @ViewChild(MatSort) sort: MatSort;
 
-  @Input() tableState?: ITableState;
+  @Input() tableDataContainer?: ITableDataContainer;
 
   traineeDetails: TraineesModel;
 
-  traineeSelectedID: number = -1;
+  editOpenIndex: number = -1;
 
-  editState: boolean = false;
+  addItemCounter: number = -1;
 
-  addEditState: IEditState;
-
-  // @Output() saveEmitter: EventEmitter<boolean> = new EventEmitter();
+  mode: any = { state: modeOptions.closed, saveMode: { isSave: false } };
 
   constructor(private store: Store<AppState>, private apiService: ApiService, private ref: ChangeDetectorRef, private utilService: UtilService) { };
 
@@ -51,63 +54,56 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
   };
 
   setTableState() {
-    this.dataSource = new MatTableDataSource(this.tableState.traineesDataSource);
+    this.dataSource = new MatTableDataSource(this.tableDataContainer.traineesDataSource);
     this.dataSource.sort = this.sort;
-    if (this.tableState.filterValue !== undefined && !'') {
-      this.dataSource = this.utilService.filterById(this.tableState.filterValue, this.tableState.traineesDataSource);
+    if (this.tableDataContainer.filterValue !== undefined && !'') {
+      this.dataSource = this.utilService.filterById(this.tableDataContainer.filterValue, this.tableDataContainer.traineesDataSource);
     }
   };
 
   //action dispatch
-  searchFilterHandler(searchFilterHandler: string) {
-    this.dataSource = this.utilService.filterById(searchFilterHandler, this.tableState.traineesDataSource);
-    this.searchFilterActionHandler(searchFilterHandler);
-  };
-
-  searchFilterActionHandler(filterValue: string) {
-    this.store.dispatch(new FilterActionState(FilterActionList.SEARCH_FILTER_ACTIVE, { traineesDataSource: this.tableState.traineesDataSource, filterValue: filterValue }));
+  searchKeyUp(value: string) {
+    this.dataSource = this.utilService.filterById(value, this.tableDataContainer.traineesDataSource);
+    this.store.dispatch(new FilterActionState(FilterActionList.SEARCH_FILTER_ACTIVE, { traineesDataSource: this.tableDataContainer.traineesDataSource, filterValue: value }));
   };
 
   //edit handler
-  editTraineeDetails(trainee: TraineesModel, index: number) {
+  editTraineeDetails(trainee: TraineesModel, selecteRowIndex: number) {
 
-    if (this.traineeSelectedID !== index) {
-      this.traineeSelectedID = index;
-      this.editState = true;
-      this.addState = false;
+    if (this.editOpenIndex !== selecteRowIndex) {
+      this.editOpenIndex = selecteRowIndex;
       this.traineeDetails = new TraineesModel(trainee);
+      this.mode = Object.assign({}, this.mode, { state: modeOptions.editState, saveMode: { isSave: false } });
     } else {
-      this.editState = false;
-      this.addState = false;
-      this.traineeSelectedID = -1;
+      this.editOpenIndex = -1;
+      this.mode = Object.assign({}, this.mode, { state: modeOptions.closed, saveMode: { isSave: false } });
     }
-    this.isSave = false;
+
   };
 
-  addState: boolean = false;
-  isSave: boolean = false;
-  id: number = -1;
-  mode: string = undefined;
   addTrainee() {
-
-    if (!this.isSave) {
+    //reset mode
+    if (!this.mode.saveMode.isSave) {
       this.apiService.getID().subscribe((response: any) => {
-        this.id = response.id;
-        this.addState = true;
-        this.editState = false;
+
+        this.mode = Object.assign({}, this.mode, { state: modeOptions.addState, saveMode: { isSave: true } });
+        this.addItemCounter = response.id;
+
         const tempTrainee: TraineesModel = <TraineesModel>new Object({ id: response.id });
         this.traineeDetails = new TraineesModel(tempTrainee);
-        console.log('edit save', this.traineeDetails);
-        this.isSave = true;
+
+        this.ref.markForCheck();
       });
     }
-    if (this.isSave) {
-      console.log('save', this.traineeDetails);
+    //save mode
+    else if (this.mode.saveMode.isSave) {
+
       this.store.dispatch(new AddState(AddActionsList.ADD_SAVE, this.traineeDetails));
-      const tempTrainee: TraineesModel = <TraineesModel>new Object({ id: ++this.id });
+      const tempTrainee: TraineesModel = <TraineesModel>new Object({ id: ++this.addItemCounter });
       this.traineeDetails = new TraineesModel(tempTrainee);
+
+      this.ref.markForCheck();
     }
-    this.ref.markForCheck();
   };
 
   tableSortState$() {

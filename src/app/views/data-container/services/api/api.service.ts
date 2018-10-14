@@ -56,7 +56,7 @@ export class ApiService {
 
     return Observable.create((obs) => {
 
-      this.http.post(`${environment.apiUrl}/savetrainee`, { ...trainee }).subscribe((response) => {
+      this.http.post(`${environment.apiUrl}/Save`, { ...trainee }).subscribe((response) => {
 
         console.log('saveTrainee response: ', response);
 

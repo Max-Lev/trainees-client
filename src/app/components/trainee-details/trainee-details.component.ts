@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/reducers';
 import { EditState, EditActionsList } from 'src/app/reducers/edit/edit.actions';
 import { AddActionsList, AddState } from 'src/app/reducers/add/add.actions';
+import { modeOptions } from '../table/table.component';
 
 export interface TraineeModelEmitter {
   traineeDetails: TraineesModel;
@@ -20,47 +21,33 @@ export class TraineeDetailsComponent implements OnInit, OnChanges {
 
   @Input() traineeDetails: TraineesModel;
 
-  @Input() mode: string;
+  @Input() mode: any;
 
-  detailsView: any = { k: [], v: [] };
+  viewObj: any = { k: [], v: [] };
 
   constructor(private store: Store<AppState>, private ref: ChangeDetectorRef) { }
 
-  ngOnInit() {
-
-  };
+  ngOnInit() { };
 
   ngOnChanges(): void {
-    this.detailsView = { k: [], v: [] };
-    const k: string[] = Object.keys(this.traineeDetails);
-    k.filter((prop) => {
-      this.detailsView.k.push(prop);
-      this.detailsView.v.push(this.traineeDetails[prop]);
-    });
+    console.log(this.mode)
+    this.viewItemFormatter();
+  };
+
+  viewItemFormatter() {
+    this.viewObj = { k: [], v: [] };
+    const propsList: string[] = Object.keys(this.traineeDetails);
+    propsList.filter((prop) => { this.viewObj.k.push(prop); });
     this.ref.detectChanges();
   };
 
-
-  onChange(traineeDetails: TraineesModel, value: string, prop: string) {
-    if (this.mode !== "'addState'") {
-      this.store.dispatch(new EditState(EditActionsList.EDIT_ACTIVE, traineeDetails, value, prop));
+  onChange(traineeModelChange: TraineesModel, value: string, prop: string) {
+    if (this.mode.state === modeOptions.editState) {
+      this.store.dispatch(new EditState(EditActionsList.EDIT_ACTIVE, traineeModelChange, value, prop));
     }
-    else {
-      this.store.dispatch(new AddState(AddActionsList.ADD_ACTIVE, traineeDetails));
+    else if (this.mode.state === modeOptions.addState) {
+      this.store.dispatch(new AddState(AddActionsList.ADD_ACTIVE, traineeModelChange));
     }
   };
-
-  // onChange(traineeDetails: TraineesModel, value: string, prop: string) {
-  //   if (this.mode !== "'addState'") {
-  //     this.store.dispatch(new EditState(EditActionsList.EDIT_ACTIVE, traineeDetails, value, prop));
-  //     // console.log('edit action')
-  //   } else {
-  //     // console.log('save action', this.traineeDetails)
-  //     // if (traineeDetails.name !== undefined && traineeDetails.name !== '') {
-  //     this.store.dispatch(new AddState(AddActionsList.ADD_ACTIVE, { trainee: traineeDetails }));
-  //     // debugger
-  //     // }
-  //   }
-  // };
 
 }

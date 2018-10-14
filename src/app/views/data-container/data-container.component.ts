@@ -7,7 +7,7 @@ import { FilterActionState, FilterActionList } from 'src/app/reducers/search-fil
 import { EditState } from 'src/app/reducers/edit/edit.actions';
 import { AddState, AddActionsList } from 'src/app/reducers/add/add.actions';
 
-export interface ITableState {
+export interface ITableDataContainer {
   traineesDataSource: TraineesModel[],
   filterValue: string
 };
@@ -24,7 +24,7 @@ export class DataContainerComponent implements OnInit, AfterViewInit {
 
   filterValue: string;
 
-  tableState: ITableState = <ITableState>new Object({ traineesDataSource: [], filterValue: '' });
+  tableDataContainer: ITableDataContainer = <ITableDataContainer>new Object({ traineesDataSource: [], filterValue: '' });
 
   constructor(private store: Store<AppState>, private apiService: ApiService, private ref: ChangeDetectorRef) {
     this.searchFilterState$();
@@ -36,9 +36,7 @@ export class DataContainerComponent implements OnInit, AfterViewInit {
     this.getTraineesApiAction();
   };
 
-  ngAfterViewInit(): void {
-
-  };
+  ngAfterViewInit(): void { };
 
   addState$() {
 
@@ -50,7 +48,7 @@ export class DataContainerComponent implements OnInit, AfterViewInit {
 
           this.traineesDataSource = data;
 
-          this.tableState = Object.assign({}, this.tableState, { traineesDataSource: this.traineesDataSource, filterValue: this.filterValue });
+          this.tableDataContainer = Object.assign({}, this.tableDataContainer, { traineesDataSource: this.traineesDataSource, filterValue: this.filterValue });
 
           this.ref.detectChanges();
 
@@ -66,30 +64,27 @@ export class DataContainerComponent implements OnInit, AfterViewInit {
 
       this.filterValue = state.payload['filterValue'];
 
-      this.tableState = <ITableState>new Object({ traineesDataSource: state.payload['traineesDataSource'], filterValue: state.payload['filterValue'] });
+      this.tableDataContainer = <ITableDataContainer>new Object({ traineesDataSource: state.payload['traineesDataSource'], filterValue: state.payload['filterValue'] });
 
       this.ref.markForCheck();
     });
   };
 
+  // grid data binding
   editState$() {
     this.store.pipe(select('editReducer')).subscribe((state: EditState) => {
-
-      // console.log('editReducer: ', state);
-
-      const dataSource: TraineesModel[] = this.tableState.traineesDataSource.map((item) => {
+      console.log('editState: ', state);
+      const dataSource: TraineesModel[] = this.tableDataContainer.traineesDataSource.map((item) => {
 
         if (item.id === state.payload.id) {
-
           item = Object.assign({}, item, { [state.prop]: state.value });
-
           return item;
         }
         else {
           return item;
         }
       });
-      this.tableState = <ITableState>new Object({ traineesDataSource: dataSource, filterValue: this.filterValue });
+      this.tableDataContainer = <ITableDataContainer>new Object({ traineesDataSource: dataSource, filterValue: this.filterValue });
     });
   };
 
@@ -99,9 +94,9 @@ export class DataContainerComponent implements OnInit, AfterViewInit {
 
       this.traineesDataSource = [...trainees.map(trainee => Object.assign({}, trainee))];
 
-      this.tableState = Object.assign({}, this.tableState, { traineesDataSource: this.traineesDataSource, filterValue: this.filterValue });
+      this.tableDataContainer = Object.assign({}, this.tableDataContainer, { traineesDataSource: this.traineesDataSource, filterValue: this.filterValue });
 
-      this.store.dispatch(new FilterActionState(FilterActionList.SEARCH_FILTER_DATA, this.tableState));
+      this.store.dispatch(new FilterActionState(FilterActionList.SEARCH_FILTER_DATA, this.tableDataContainer));
 
     });
   };

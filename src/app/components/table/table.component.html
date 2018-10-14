@@ -1,7 +1,7 @@
 <section class="search-container">
   <span class="search-title">Filter</span>
   <mat-form-field>
-    <input matInput (keyup)="searchFilterHandler($event.target.value)" placeholder="ID:###" [(ngModel)]="tableState.filterValue">
+    <input matInput (keyup)="searchKeyUp($event.target.value)" placeholder="ID:###" [(ngModel)]="tableDataContainer.filterValue">
   </mat-form-field>
   <button (click)="addTrainee()" type="button" matButton mat-stroked-button>Add</button>
   <button type="button" mat-stroked-button>Remove</button>
@@ -51,13 +51,8 @@
   </section>
 
   <!-- details panel -->
-  <!-- <ng-container *ngIf="editState && !addState"> -->
-  <ng-container *ngIf="editState && !addState">
-    <app-trainee-details [traineeDetails]="traineeDetails" mode="'editState'"></app-trainee-details>
+  <ng-container *ngIf="mode.state==='editState' || mode.state==='addState'">
+    <app-trainee-details [traineeDetails]="traineeDetails" [mode]="mode"></app-trainee-details>
   </ng-container>
-  <ng-container *ngIf="addState && !editState">
-    <app-trainee-details [traineeDetails]="traineeDetails" mode="'addState'"></app-trainee-details>
-  </ng-container>
-  <!-- details panel -->
 
 </section>
