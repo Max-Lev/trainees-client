@@ -34,4 +34,40 @@ export class ApiService {
     });
   };
 
+  getID(): Observable<any> {
+
+    return Observable.create((obs: Observer<any>) => {
+
+      this.http.get(`${environment.apiUrl}/GetID`).subscribe((response: any) => {
+
+        obs.next(response);
+
+        return response;
+
+      }, (err) => {
+        obs.error(err);
+        throw new Error(err);
+      });
+    });
+
+  };
+
+  saveTrainee(trainee: TraineesModel): Observable<TraineesModel[]> {
+
+    return Observable.create((obs) => {
+
+      this.http.post(`${environment.apiUrl}/savetrainee`, { ...trainee }).subscribe((response) => {
+
+        console.log('saveTrainee response: ', response);
+
+        obs.next(response);
+
+        return response;
+
+      });
+
+    });
+    
+  };
+
 }

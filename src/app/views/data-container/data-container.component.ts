@@ -4,7 +4,8 @@ import { TraineesModel } from 'src/app/models/trainees.model';
 import { Store, select } from '@ngrx/store';
 import { AppState } from 'src/app/reducers';
 import { FilterActionState, FilterActionList } from 'src/app/reducers/search-filter/filter.action';
-import { AddEditState } from 'src/app/reducers/add-edit/add-edit.actions';
+import { EditState } from 'src/app/reducers/edit/edit.actions';
+import { AddState, AddActionsList } from 'src/app/reducers/add/add.actions';
 
 export interface ITableState {
   traineesDataSource: TraineesModel[],
@@ -26,9 +27,9 @@ export class DataContainerComponent implements OnInit, AfterViewInit {
   tableState: ITableState = <ITableState>new Object({ traineesDataSource: [], filterValue: '' });
 
   constructor(private store: Store<AppState>, private apiService: ApiService, private ref: ChangeDetectorRef) {
-
-    this.getSearchFilterState$();
-
+    this.searchFilterState$();
+    this.editState$();
+    this.addState$();
   };
 
   ngOnInit() {
@@ -36,10 +37,29 @@ export class DataContainerComponent implements OnInit, AfterViewInit {
   };
 
   ngAfterViewInit(): void {
-    this.getAddEditState$();
+
   };
 
-  getSearchFilterState$() {
+  addState$() {
+
+    this.store.pipe(select('addReducer')).subscribe((state: AddState) => {
+
+      if (state.type === AddActionsList.ADD_SAVE) {
+
+        this.apiService.saveTrainee(state.payload).subscribe((data: TraineesModel[]) => {
+
+          this.traineesDataSource = data;
+
+          this.tableState = Object.assign({}, this.tableState, { traineesDataSource: this.traineesDataSource, filterValue: this.filterValue });
+
+          this.ref.detectChanges();
+
+        });
+      }
+    });
+  };
+
+  searchFilterState$() {
     this.store.pipe(select('filterReducer')).subscribe((state: FilterActionState) => {
 
       this.traineesDataSource = state.payload['traineesDataSource'];
@@ -52,10 +72,10 @@ export class DataContainerComponent implements OnInit, AfterViewInit {
     });
   };
 
-  getAddEditState$() {
-    this.store.pipe(select('addEditReducer')).subscribe((state: AddEditState) => {
+  editState$() {
+    this.store.pipe(select('editReducer')).subscribe((state: EditState) => {
 
-      console.log('addEditReducer: ', state);
+      // console.log('editReducer: ', state);
 
       const dataSource: TraineesModel[] = this.tableState.traineesDataSource.map((item) => {
 
@@ -74,6 +94,7 @@ export class DataContainerComponent implements OnInit, AfterViewInit {
   };
 
   getTraineesApiAction() {
+
     this.apiService.getTrainees().subscribe((trainees: TraineesModel[]) => {
 
       this.traineesDataSource = [...trainees.map(trainee => Object.assign({}, trainee))];
@@ -82,15 +103,9 @@ export class DataContainerComponent implements OnInit, AfterViewInit {
 
       this.store.dispatch(new FilterActionState(FilterActionList.SEARCH_FILTER_DATA, this.tableState));
 
-      this.setTableState();
     });
   };
 
-  setTableState() {
-    this.tableState = Object.assign({}, this.tableState, { traineesDataSource: this.traineesDataSource, filterValue: this.filterValue });
-
-    this.ref.detectChanges();
-  };
 
 
 }

@@ -44,15 +44,19 @@
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr (click)="editTraineeDetails(row,row.id)" mat-row *matRowDef="let row; columns: displayedColumns;let i = index;"></tr>
+      <tr (click)="editTraineeDetails(row,i)" mat-row *matRowDef="let row; columns: displayedColumns;let i = index;"></tr>
 
     </table>
 
   </section>
 
   <!-- details panel -->
-  <ng-container *ngIf="traineeSelectedID!==-1 && !add">
-    <app-trainee-details [traineeDetails]="traineeDetails"></app-trainee-details>
+  <!-- <ng-container *ngIf="editState && !addState"> -->
+  <ng-container *ngIf="editState && !addState">
+    <app-trainee-details [traineeDetails]="traineeDetails" mode="'editState'"></app-trainee-details>
+  </ng-container>
+  <ng-container *ngIf="addState && !editState">
+    <app-trainee-details [traineeDetails]="traineeDetails" mode="'addState'"></app-trainee-details>
   </ng-container>
   <!-- details panel -->
 
