@@ -30,20 +30,18 @@ export class DataContainerComponent implements OnInit, AfterViewInit {
   constructor(private store: Store<AppState>, private apiService: ApiService, private ref: ChangeDetectorRef) {
     this.searchFilterState$();
     this.editState$();
-    // this.addState$();
+    this.addState$();
     this.removeState$();
-
-    this.store.pipe(select('addReducer')).subscribe((state: AddState) => {
-      console.log('addState: ', state);
-    });
   };
 
   ngOnInit() {
     this.getTraineesApiAction();
   };
 
-  ngAfterViewInit(): void {
+  ngAfterViewInit(): void { };
 
+  addState$() {
+    this.store.pipe(select('addReducer')).subscribe((state: AddState) => { });
   };
 
   removeState$() {

@@ -1,12 +1,11 @@
 import { Component, OnInit, ViewChild, AfterViewInit, ViewEncapsulation, OnChanges, Input, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
 import { MatSort, MatTableDataSource, } from '@angular/material';
-import { TraineesModel, ITrainees } from 'src/app/models/trainees.model';
+import { TraineesModel } from 'src/app/models/trainees.model';
 import { Store, select } from '@ngrx/store';
 import { FilterActionState, FilterActionList } from 'src/app/reducers/search-filter/filter.action';
 import { AppState } from 'src/app/reducers';
 import { UtilService } from 'src/app/views/data-container/services/util.service';
 import { ITableDataContainer } from 'src/app/views/data-container/data-container.component';
-import { AddState, AddActionsList } from 'src/app/reducers/add/add.actions';
 import { ApiService } from 'src/app/views/data-container/services/api/api.service';
 import { RemoveState, RemoveActionsList } from 'src/app/reducers/remove/remove.actions';
 import { IModeState, ModeState, SAVEMODEACTIONTYPES, PanelModeState, PANELDETAILSACTIONTYPES, SaveModeState, REMOVEMODEACTIONTYPES, RemoveModeState } from 'src/app/reducers/mode/mode-reducer.actions';
@@ -53,19 +52,10 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
       });
 
       if (state.saveState.type === SAVEMODEACTIONTYPES.SAVE_TRUE) {
-        state;
-        debugger;
+        const trainee: TraineesModel = state.panelState.trainee;
+        this.activeTraineeModel = new TraineesModel(trainee);
+        this.addItemCounter = this.activeTraineeModel.id;
       }
-
-      // if (state.saveState.type === SAVEMODEACTIONTYPES.SAVE_TRUE) {
-      //   // this.activeTraineeModel = state.panelState.trainee;
-      //   // console.log(state.panelState.type)
-      //   const tempTrainee: TraineesModel = <TraineesModel>new Object({ id: ++this.addItemCounter });
-      //   this.activeTraineeModel = new TraineesModel(tempTrainee);
-      //   debugger;
-      //   this.addItemCounter = this.activeTraineeModel.id;
-      //   debugger;
-      // }
       this.ref.markForCheck();
     });
   };
@@ -100,13 +90,15 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
     if (this.editOpenIndex !== selecteRowIndex) {
       this.editOpenIndex = selecteRowIndex;
       this.activeTraineeModel = new TraineesModel(trainee);
-      this.store.dispatch(new ModeState(PANELDETAILSACTIONTYPES.PANEL_DETAILS_EDIT, new PanelModeState(PANELDETAILSACTIONTYPES.PANEL_DETAILS_EDIT, trainee),
-        new SaveModeState(SAVEMODEACTIONTYPES.SAVE_FALSE), new RemoveModeState(REMOVEMODEACTIONTYPES.REMOVE_FALSE)
+      this.store.dispatch(new ModeState(PANELDETAILSACTIONTYPES.PANEL_DETAILS_EDIT,
+        new PanelModeState(PANELDETAILSACTIONTYPES.PANEL_DETAILS_EDIT, trainee),
+        new SaveModeState(SAVEMODEACTIONTYPES.SAVE_FALSE), new RemoveModeState(REMOVEMODEACTIONTYPES.REMOVE_ACTIVE)
       ));
     } else {
       this.editOpenIndex = -1;
-      this.store.dispatch(new ModeState(PANELDETAILSACTIONTYPES.PANEL_DETAILS_CLOSED, new PanelModeState(PANELDETAILSACTIONTYPES.PANEL_DETAILS_CLOSED, this.activeTraineeModel),
-        new SaveModeState(SAVEMODEACTIONTYPES.SAVE_FALSE), new RemoveModeState(REMOVEMODEACTIONTYPES.REMOVE_TRUE)
+      this.store.dispatch(new ModeState(PANELDETAILSACTIONTYPES.PANEL_DETAILS_CLOSED, new
+        PanelModeState(PANELDETAILSACTIONTYPES.PANEL_DETAILS_CLOSED, this.activeTraineeModel),
+        new SaveModeState(SAVEMODEACTIONTYPES.SAVE_FALSE), new RemoveModeState(REMOVEMODEACTIONTYPES.REMOVE_DISABLED)
       ));
     }
   };
@@ -128,7 +120,7 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
         this.store.dispatch(new ModeState(PANELDETAILSACTIONTYPES.PANEL_DETAILS_SAVE,
           new PanelModeState(PANELDETAILSACTIONTYPES.PANEL_DETAILS_SAVE, this.activeTraineeModel),
           new SaveModeState(SAVEMODEACTIONTYPES.SAVE_TRUE),
-          new RemoveModeState(REMOVEMODEACTIONTYPES.REMOVE_TRUE)
+          new RemoveModeState(REMOVEMODEACTIONTYPES.REMOVE_DISABLED)
         ));
         this.ref.markForCheck();
       });
@@ -145,7 +137,7 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
         // this.store.dispatch(new AddState(AddActionsList.ADD_SAVE_ACTION, this.activeTraineeModel));
         this.store.dispatch(new ModeState(SAVEMODEACTIONTYPES.SAVE_TRUE,
           new PanelModeState(PANELDETAILSACTIONTYPES.PANEL_DETAILS_SAVE, this.activeTraineeModel), new SaveModeState(SAVEMODEACTIONTYPES.SAVE_TRUE),
-          new RemoveModeState(REMOVEMODEACTIONTYPES.REMOVE_TRUE)));
+          new RemoveModeState(REMOVEMODEACTIONTYPES.REMOVE_DISABLED)));
         this.ref.markForCheck();
       }
     }

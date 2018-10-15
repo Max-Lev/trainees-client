@@ -11,8 +11,8 @@ export enum SAVEMODEACTIONTYPES {
   SAVE_FALSE = '[SAVE_MODE] SAVE_FALSE'
 }
 export enum REMOVEMODEACTIONTYPES {
-  REMOVE_TRUE = '[REMOVE_MODE] REMOVE_TRUE',
-  REMOVE_FALSE = '[REMOVE_MODE] REMOVE_FALSE'
+  REMOVE_DISABLED = '[REMOVE_MODE] REMOVE_DISABLED',
+  REMOVE_ACTIVE = '[REMOVE_MODE] REMOVE_ACTIVE'
 }
 
 export interface IPanelModeState {
@@ -31,7 +31,7 @@ export class PanelModeState implements IPanelModeState {
   constructor(type: string, trainee?: TraineesModel) {
     this.type = type;
     this.trainee = trainee;
-    console.log('PanelModeState: ',this)
+    console.log('PanelModeState: ', this)
   }
 };
 export interface ISaveModeState {
@@ -60,21 +60,21 @@ export interface IRemoveModeState {
   payload: any;
 };
 export class RemoveModeInitial implements IRemoveModeState {
-  type: string = REMOVEMODEACTIONTYPES.REMOVE_FALSE;
+  type: string = REMOVEMODEACTIONTYPES.REMOVE_ACTIVE;
   payload: any = {
     disabled: true
   }
   constructor() { }
 }
 export class RemoveModeState implements IRemoveModeState {
-  type: string = REMOVEMODEACTIONTYPES.REMOVE_FALSE;
+  type: string = REMOVEMODEACTIONTYPES.REMOVE_ACTIVE;
   payload: any = {
     disabled: true
   }
   constructor(type: string) {
     this.type = type;
     this.payload = {
-      disabled: this.type
+      disabled: (this.type === REMOVEMODEACTIONTYPES.REMOVE_DISABLED) ? true : false
     }
   }
 }

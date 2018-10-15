@@ -60,7 +60,7 @@ export function ModeReducer(state = new ModeStateInitial(), action: IModeState):
       };
       console.log('saveTrue: ', saveTrue);
       return saveTrue;
-    case REMOVEMODEACTIONTYPES.REMOVE_TRUE:
+    case REMOVEMODEACTIONTYPES.REMOVE_DISABLED:
       const removeTrue = {
         ...state, ...action,
         type: action.type,
@@ -70,7 +70,7 @@ export function ModeReducer(state = new ModeStateInitial(), action: IModeState):
       };
       console.log('removeTrue: ', saveTrue);
       return removeTrue;
-    case REMOVEMODEACTIONTYPES.REMOVE_FALSE:
+    case REMOVEMODEACTIONTYPES.REMOVE_ACTIVE:
       const removefalse = {
         ...state, ...action,
         type: action.type,
