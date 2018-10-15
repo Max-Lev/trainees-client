@@ -23,7 +23,7 @@ export class TraineesModel implements ITrainees {
     country: string;
     zip: number;
     isSelected: boolean;
-    constructor(model: TraineesModel) {
+    constructor(model?: TraineesModel) {
         this.id = model['id'];
         this.name = model['name'];
         this.date = model['date'];
@@ -35,14 +35,6 @@ export class TraineesModel implements ITrainees {
         this.country = model['country'];
         this.zip = model['zip'];
     };
-    getViewModel() {
-        return {
-            id: this.id,
-            name: this.name,
-            date: this.date,
-            grade: this.grade,
-            subject: this.subject
-        }
-    };
+
 
 }

@@ -42,12 +42,14 @@ export class TraineeDetailsComponent implements OnInit, OnChanges {
   };
 
   onChange(traineeModelChange: TraineesModel, value: string, prop: string) {
+
     if (this.mode.state === modeOptions.editState) {
       this.store.dispatch(new EditState(EditActionsList.EDIT_ACTIVE, traineeModelChange, value, prop));
     }
     else if (this.mode.state === modeOptions.addState) {
       this.store.dispatch(new AddState(AddActionsList.ADD_ACTIVE, traineeModelChange));
     }
+    
   };
 
 }

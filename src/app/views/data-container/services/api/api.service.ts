@@ -45,12 +45,16 @@ export class ApiService {
         return response;
 
       }, (err) => {
+
         obs.error(err);
+
         throw new Error(err);
+
       });
     });
 
   };
+
 
   saveTrainee(trainee: TraineesModel): Observable<TraineesModel[]> {
 
@@ -65,7 +69,8 @@ export class ApiService {
         return response;
 
       }, (err) => {
-        console.log('err: ', err)
+        console.log('err: ', err);
+
         return err;
       });
 
@@ -78,7 +83,7 @@ export class ApiService {
     return Observable.create((obs) => {
 
       this.http.put(`${environment.apiUrl}/deletebyid?objID=${trainee.id}`, { ...trainee }).subscribe((response) => {
-        
+
         obs.next(response);
 
         return response;

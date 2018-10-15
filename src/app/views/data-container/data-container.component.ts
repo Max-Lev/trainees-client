@@ -42,21 +42,24 @@ export class DataContainerComponent implements OnInit, AfterViewInit {
 
   removeState$() {
     this.store.pipe(select('removeReducer')).subscribe((state: IRemoveState) => {
-      console.log('removeState: ', state);
+
       if (state.type === RemoveActionsList.REMOVE_ACTIVE) {
+
         this.apiService.deleteTrainee(state.payload).subscribe((data: TraineesModel[]) => {
+
           this.traineesDataSource = data;
+
           this.tableDataContainer = Object.assign({}, this.tableDataContainer, { traineesDataSource: this.traineesDataSource, filterValue: this.filterValue });
+
           this.store.dispatch(new RemoveState(RemoveActionsList.REMOVE_INIT, null));
+
           this.ref.markForCheck();
         });
       };
-    })
-
+    });
   };
 
   addState$() {
-
     this.store.pipe(select('addReducer')).subscribe((state: AddState) => {
 
       if (state.type === AddActionsList.ADD_SAVE) {
@@ -68,22 +71,8 @@ export class DataContainerComponent implements OnInit, AfterViewInit {
           this.tableDataContainer = Object.assign({}, this.tableDataContainer, { traineesDataSource: this.traineesDataSource, filterValue: this.filterValue });
 
           this.ref.detectChanges();
-
         });
       }
-    });
-  };
-
-  searchFilterState$() {
-    this.store.pipe(select('filterReducer')).subscribe((state: FilterActionState) => {
-
-      this.traineesDataSource = state.payload['traineesDataSource'];
-
-      this.filterValue = state.payload['filterValue'];
-
-      this.tableDataContainer = <ITableDataContainer>new Object({ traineesDataSource: state.payload['traineesDataSource'], filterValue: state.payload['filterValue'] });
-
-      this.ref.markForCheck();
     });
   };
 
@@ -104,6 +93,21 @@ export class DataContainerComponent implements OnInit, AfterViewInit {
       this.tableDataContainer = <ITableDataContainer>new Object({ traineesDataSource: dataSource, filterValue: this.filterValue });
     });
   };
+
+  // search
+  searchFilterState$() {
+    this.store.pipe(select('filterReducer')).subscribe((state: FilterActionState) => {
+
+      this.traineesDataSource = state.payload['traineesDataSource'];
+
+      this.filterValue = state.payload['filterValue'];
+
+      this.tableDataContainer = <ITableDataContainer>new Object({ traineesDataSource: state.payload['traineesDataSource'], filterValue: state.payload['filterValue'] });
+
+      this.ref.markForCheck();
+    });
+  };
+
 
   getTraineesApiAction() {
 

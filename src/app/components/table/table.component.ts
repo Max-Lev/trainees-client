@@ -94,7 +94,6 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
 
         this.mode = Object.assign({}, this.mode, { state: modeOptions.addState, saveMode: { isSave: true }, disabled: true });
         this.addItemCounter = response.id;
-
         const tempTrainee: TraineesModel = <TraineesModel>new Object({ id: response.id });
         this.activeTraineeModel = new TraineesModel(tempTrainee);
 
@@ -103,12 +102,12 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
     }
     //save mode
     else if (this.mode.saveMode.isSave) {
-
-      this.store.dispatch(new AddState(AddActionsList.ADD_SAVE, this.activeTraineeModel));
-      const tempTrainee: TraineesModel = <TraineesModel>new Object({ id: ++this.addItemCounter });
-      this.activeTraineeModel = new TraineesModel(tempTrainee);
-
-      this.ref.markForCheck();
+      if (this.activeTraineeModel.name !== '' && this.activeTraineeModel.name !== undefined) {
+        this.activeTraineeModel = Object.assign({}, this.activeTraineeModel, { id: ++this.addItemCounter });
+        this.store.dispatch(new AddState(AddActionsList.ADD_SAVE, this.activeTraineeModel));
+        this.activeTraineeModel = new TraineesModel(<TraineesModel>new Object({ id: this.addItemCounter }));
+        this.ref.markForCheck();
+      }
     }
   };
 
