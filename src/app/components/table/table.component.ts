@@ -9,11 +9,12 @@ import { IEditState } from 'src/app/reducers/edit/edit.actions';
 import { ITableDataContainer } from 'src/app/views/data-container/data-container.component';
 import { AddState, AddActionsList } from 'src/app/reducers/add/add.actions';
 import { ApiService } from 'src/app/views/data-container/services/api/api.service';
+import { RemoveState, RemoveActionsList } from 'src/app/reducers/remove/remove.actions';
 
 export const modeOptions = {
-  editState: 'editState', 
+  editState: 'editState',
   addState: 'addState',
-  closed: 'closed', 
+  closed: 'closed',
   saveMode: { isSave: false }
 };
 
@@ -33,13 +34,13 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
 
   @Input() tableDataContainer?: ITableDataContainer;
 
-  traineeDetails: TraineesModel;
+  activeTraineeModel: TraineesModel;
 
   editOpenIndex: number = -1;
 
   addItemCounter: number = -1;
 
-  mode: any = { state: modeOptions.closed, saveMode: { isSave: false } };
+  mode: any = { state: modeOptions.closed, saveMode: { isSave: false }, disabled: true };
 
   constructor(private store: Store<AppState>, private apiService: ApiService, private ref: ChangeDetectorRef, private utilService: UtilService) { };
 
@@ -72,13 +73,18 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
 
     if (this.editOpenIndex !== selecteRowIndex) {
       this.editOpenIndex = selecteRowIndex;
-      this.traineeDetails = new TraineesModel(trainee);
-      this.mode = Object.assign({}, this.mode, { state: modeOptions.editState, saveMode: { isSave: false } });
+      this.activeTraineeModel = new TraineesModel(trainee);
+      this.mode = Object.assign({}, this.mode, { state: modeOptions.editState, saveMode: { isSave: false }, disabled: false });
     } else {
       this.editOpenIndex = -1;
-      this.mode = Object.assign({}, this.mode, { state: modeOptions.closed, saveMode: { isSave: false } });
+      this.mode = Object.assign({}, this.mode, { state: modeOptions.closed, saveMode: { isSave: false }, disabled: true });
     }
 
+  };
+
+  removeTrainee() {
+    this.store.dispatch(new RemoveState(RemoveActionsList.REMOVE_ACTIVE, this.activeTraineeModel));
+    this.mode = Object.assign({}, this.mode, { disabled: true });
   };
 
   addTrainee() {
@@ -86,11 +92,11 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
     if (!this.mode.saveMode.isSave) {
       this.apiService.getID().subscribe((response: any) => {
 
-        this.mode = Object.assign({}, this.mode, { state: modeOptions.addState, saveMode: { isSave: true } });
+        this.mode = Object.assign({}, this.mode, { state: modeOptions.addState, saveMode: { isSave: true }, disabled: true });
         this.addItemCounter = response.id;
 
         const tempTrainee: TraineesModel = <TraineesModel>new Object({ id: response.id });
-        this.traineeDetails = new TraineesModel(tempTrainee);
+        this.activeTraineeModel = new TraineesModel(tempTrainee);
 
         this.ref.markForCheck();
       });
@@ -98,9 +104,9 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
     //save mode
     else if (this.mode.saveMode.isSave) {
 
-      this.store.dispatch(new AddState(AddActionsList.ADD_SAVE, this.traineeDetails));
+      this.store.dispatch(new AddState(AddActionsList.ADD_SAVE, this.activeTraineeModel));
       const tempTrainee: TraineesModel = <TraineesModel>new Object({ id: ++this.addItemCounter });
-      this.traineeDetails = new TraineesModel(tempTrainee);
+      this.activeTraineeModel = new TraineesModel(tempTrainee);
 
       this.ref.markForCheck();
     }

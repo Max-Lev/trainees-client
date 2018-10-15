@@ -64,10 +64,32 @@ export class ApiService {
 
         return response;
 
+      }, (err) => {
+        console.log('err: ', err)
+        return err;
       });
 
     });
-    
+
+  };
+
+  deleteTrainee(trainee: TraineesModel): Observable<TraineesModel[]> {
+
+    return Observable.create((obs) => {
+
+      this.http.put(`${environment.apiUrl}/deletebyid?objID=${trainee.id}`, { ...trainee }).subscribe((response) => {
+        
+        obs.next(response);
+
+        return response;
+
+      }, (err) => {
+        console.log('err: ', err)
+        return err;
+      });
+
+    });
+
   };
 
 }

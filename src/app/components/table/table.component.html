@@ -4,7 +4,7 @@
     <input matInput (keyup)="searchKeyUp($event.target.value)" placeholder="ID:###" [(ngModel)]="tableDataContainer.filterValue">
   </mat-form-field>
   <button (click)="addTrainee()" type="button" matButton mat-stroked-button>Add</button>
-  <button type="button" mat-stroked-button>Remove</button>
+  <button (click)="removeTrainee()" [disabled]="mode.disabled" type="button" mat-stroked-button>Remove</button>
 </section>
 
 <section class="layout-container">
@@ -52,7 +52,7 @@
 
   <!-- details panel -->
   <ng-container *ngIf="mode.state==='editState' || mode.state==='addState'">
-    <app-trainee-details [traineeDetails]="traineeDetails" [mode]="mode"></app-trainee-details>
+    <app-trainee-details [activeTraineeModel]="activeTraineeModel" [mode]="mode"></app-trainee-details>
   </ng-container>
 
 </section>

@@ -6,6 +6,7 @@ import { AppState } from 'src/app/reducers';
 import { FilterActionState, FilterActionList } from 'src/app/reducers/search-filter/filter.action';
 import { EditState } from 'src/app/reducers/edit/edit.actions';
 import { AddState, AddActionsList } from 'src/app/reducers/add/add.actions';
+import { IRemoveState, RemoveActionsList, RemoveInitialState, RemoveState } from 'src/app/reducers/remove/remove.actions';
 
 export interface ITableDataContainer {
   traineesDataSource: TraineesModel[],
@@ -30,6 +31,7 @@ export class DataContainerComponent implements OnInit, AfterViewInit {
     this.searchFilterState$();
     this.editState$();
     this.addState$();
+    this.removeState$();
   };
 
   ngOnInit() {
@@ -37,6 +39,21 @@ export class DataContainerComponent implements OnInit, AfterViewInit {
   };
 
   ngAfterViewInit(): void { };
+
+  removeState$() {
+    this.store.pipe(select('removeReducer')).subscribe((state: IRemoveState) => {
+      console.log('removeState: ', state);
+      if (state.type === RemoveActionsList.REMOVE_ACTIVE) {
+        this.apiService.deleteTrainee(state.payload).subscribe((data: TraineesModel[]) => {
+          this.traineesDataSource = data;
+          this.tableDataContainer = Object.assign({}, this.tableDataContainer, { traineesDataSource: this.traineesDataSource, filterValue: this.filterValue });
+          this.store.dispatch(new RemoveState(RemoveActionsList.REMOVE_INIT, null));
+          this.ref.markForCheck();
+        });
+      };
+    })
+
+  };
 
   addState$() {
 
@@ -73,7 +90,7 @@ export class DataContainerComponent implements OnInit, AfterViewInit {
   // grid data binding
   editState$() {
     this.store.pipe(select('editReducer')).subscribe((state: EditState) => {
-      console.log('editState: ', state);
+
       const dataSource: TraineesModel[] = this.tableDataContainer.traineesDataSource.map((item) => {
 
         if (item.id === state.payload.id) {

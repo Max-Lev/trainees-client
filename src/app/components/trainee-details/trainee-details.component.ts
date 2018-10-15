@@ -7,7 +7,7 @@ import { AddActionsList, AddState } from 'src/app/reducers/add/add.actions';
 import { modeOptions } from '../table/table.component';
 
 export interface TraineeModelEmitter {
-  traineeDetails: TraineesModel;
+  activeTraineeModel: TraineesModel;
   value: string;
   prop: string;
 }
@@ -19,7 +19,7 @@ export interface TraineeModelEmitter {
 })
 export class TraineeDetailsComponent implements OnInit, OnChanges {
 
-  @Input() traineeDetails: TraineesModel;
+  @Input() activeTraineeModel: TraineesModel;
 
   @Input() mode: any;
 
@@ -36,7 +36,7 @@ export class TraineeDetailsComponent implements OnInit, OnChanges {
 
   viewItemFormatter() {
     this.viewObj = { k: [], v: [] };
-    const propsList: string[] = Object.keys(this.traineeDetails);
+    const propsList: string[] = Object.keys(this.activeTraineeModel);
     propsList.filter((prop) => { this.viewObj.k.push(prop); });
     this.ref.detectChanges();
   };
