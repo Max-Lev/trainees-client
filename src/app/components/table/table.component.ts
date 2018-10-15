@@ -146,9 +146,7 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
   };
 
   tableSortState$() {
-    this.sort.sortChange.subscribe((state) => {
-      console.log(state)
-    });
+    this.sort.sortChange.subscribe((state) => { });
   };
 
 }

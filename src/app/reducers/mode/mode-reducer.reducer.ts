@@ -78,8 +78,8 @@ export function ModeReducer(state = new ModeStateInitial(), action: IModeState):
         saveState: { ...action.saveState },
         removeState: { ...action.removeState }
       };
-      console.log('removefalse: ', saveFalse);
-      return saveFalse;
+      console.log('removefalse: ', removefalse);
+      return removefalse;
 
     default:
       return state;

@@ -31,7 +31,6 @@ export class PanelModeState implements IPanelModeState {
   constructor(type: string, trainee?: TraineesModel) {
     this.type = type;
     this.trainee = trainee;
-    console.log('PanelModeState: ', this)
   }
 };
 export interface ISaveModeState {
