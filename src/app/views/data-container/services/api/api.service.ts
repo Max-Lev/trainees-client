@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { Observable, Observer } from 'rxjs';
+import { Observable, Observer, Subject } from 'rxjs';
 import { TraineesModel } from 'src/app/models/trainees.model';
 
 @Injectable({
@@ -55,26 +55,21 @@ export class ApiService {
 
   };
 
-
+  sub: Subject<any> = new Subject();
   saveTrainee(trainee: TraineesModel): Observable<TraineesModel[]> {
+    
+    this.http.post(`${environment.apiUrl}/Save`, { ...trainee }).subscribe((response) => {
 
-    return Observable.create((obs) => {
+      this.sub.next(response);
+      
+      return response;
 
-      this.http.post(`${environment.apiUrl}/Save`, { ...trainee }).subscribe((response) => {
-
-        console.log('saveTrainee response: ', response);
-
-        obs.next(response);
-
-        return response;
-
-      }, (err) => {
-        console.log('err: ', err);
-
-        return err;
-      });
-
+    }, (err) => {
+      console.log('err: ', err);
+      return err;
     });
+    return this.sub;
+
 
   };
 

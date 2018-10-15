@@ -2,7 +2,7 @@
 
   <form novalidate>
 
-    <app-table [tableDataContainer]="tableDataContainer"></app-table>
+    <app-table (save)="saveHandler($event)" [tableDataContainer]="tableDataContainer"></app-table>
 
   </form>
 

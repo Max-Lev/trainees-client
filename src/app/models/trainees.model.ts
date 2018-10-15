@@ -22,7 +22,6 @@ export class TraineesModel implements ITrainees {
     city: string;
     country: string;
     zip: number;
-    isSelected: boolean;
     constructor(model?: TraineesModel) {
         this.id = model['id'];
         this.name = model['name'];

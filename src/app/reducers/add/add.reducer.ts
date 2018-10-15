@@ -4,7 +4,7 @@ import { AddInitialState, AddActionsList, IAddState } from './add.actions';
 export function AddReducer(state = new AddInitialState(), action: IAddState) {
     switch (action.type) {
 
-        case AddActionsList.ADD_ACTIVE:
+        case AddActionsList.ADD_ACTIVE_ACTION:
             const active = {
                 ...state,
                 ...action,
@@ -12,7 +12,7 @@ export function AddReducer(state = new AddInitialState(), action: IAddState) {
             };
             return active;
 
-        case AddActionsList.ADD_SAVE:
+        case AddActionsList.ADD_SAVE_ACTION:
             const save = {
                 ...state,
                 ...action,

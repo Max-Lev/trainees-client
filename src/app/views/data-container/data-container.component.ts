@@ -30,15 +30,21 @@ export class DataContainerComponent implements OnInit, AfterViewInit {
   constructor(private store: Store<AppState>, private apiService: ApiService, private ref: ChangeDetectorRef) {
     this.searchFilterState$();
     this.editState$();
-    this.addState$();
+    // this.addState$();
     this.removeState$();
+
+    this.store.pipe(select('addReducer')).subscribe((state: AddState) => {
+      console.log('addState: ', state);
+    });
   };
 
   ngOnInit() {
     this.getTraineesApiAction();
   };
 
-  ngAfterViewInit(): void { };
+  ngAfterViewInit(): void {
+
+  };
 
   removeState$() {
     this.store.pipe(select('removeReducer')).subscribe((state: IRemoveState) => {
@@ -59,22 +65,16 @@ export class DataContainerComponent implements OnInit, AfterViewInit {
     });
   };
 
-  addState$() {
-    this.store.pipe(select('addReducer')).subscribe((state: AddState) => {
+  saveHandler(state: any) {
 
-      if (state.type === AddActionsList.ADD_SAVE) {
-
-        this.apiService.saveTrainee(state.payload).subscribe((data: TraineesModel[]) => {
-
-          this.traineesDataSource = data;
-
-          this.tableDataContainer = Object.assign({}, this.tableDataContainer, { traineesDataSource: this.traineesDataSource, filterValue: this.filterValue });
-
-          this.ref.detectChanges();
-        });
-      }
-    });
-  };
+    if (state.mode === 'Save') {
+      this.apiService.saveTrainee(state.payload).subscribe((data: TraineesModel[]) => {
+        this.traineesDataSource = data;
+        this.tableDataContainer = Object.assign({}, this.tableDataContainer, { traineesDataSource: this.traineesDataSource, filterValue: this.filterValue });
+        this.ref.markForCheck();
+      });
+    }
+  }
 
   // grid data binding
   editState$() {

@@ -1,9 +1,12 @@
 import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
 import { Observer } from 'rxjs';
-import { RouterLinkActive } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+import { AppState } from './reducers';
+import { Store } from '@ngrx/store';
 
-export interface ExampleTab {
+
+export interface NvLinks {
   path: string;
   label: string;
   isActive: boolean;
@@ -16,10 +19,10 @@ export interface ExampleTab {
 })
 export class AppComponent implements AfterViewInit {
 
-  asyncTabs: Observable<ExampleTab[]>;
+  asyncTabs: Observable<NvLinks[]>;
 
-  constructor() {
-    this.asyncTabs = Observable.create((observer: Observer<ExampleTab[]>) => {
+  constructor(private store: Store<AppState>) {
+    this.asyncTabs = Observable.create((observer: Observer<NvLinks[]>) => {
       observer.next([
         { path: '', label: 'Data', isActive: false },
         { path: 'analysis', label: 'Analysis', isActive: false },
@@ -32,5 +35,8 @@ export class AppComponent implements AfterViewInit {
 
   };
 
+  linkActive(link: ActivatedRoute) {
+    
+  }
 
 }

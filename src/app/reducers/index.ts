@@ -14,19 +14,23 @@ import { IAddState } from './add/add.actions';
 import { AddReducer } from './add/add.reducer';
 import { IRemoveState } from './remove/remove.actions';
 import { RemoveReducer } from './remove/remove.reducer';
+import { ModeReducer } from './mode/mode-reducer.reducer';
+import { IModeState } from './mode/mode-reducer.actions';
 
 export interface AppState {
   filterState: IFilterState;
   editState: IEditState;
   addState:IAddState;
   removeState:IRemoveState;
+  modeState:IModeState;
 };
 
 export const reducers: ActionReducerMap<any> = {
   filterReducer: FilterReducer,
   editReducer: EditReducer,
   addReducer: AddReducer,
-  removeReducer: RemoveReducer
+  removeReducer: RemoveReducer,
+  modeReducer:ModeReducer
 };
 
 

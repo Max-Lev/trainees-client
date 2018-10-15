@@ -51,7 +51,7 @@
   </section>
 
   <!-- details panel -->
-  <ng-container *ngIf="mode.state==='editState' || mode.state==='addState'">
+  <ng-container *ngIf="mode.state==='[PANEL_DETAILS] PANEL_DETAILS_EDIT' || mode.state==='[PANEL_DETAILS] PANEL_DETAILS_SAVE'">
     <app-trainee-details [activeTraineeModel]="activeTraineeModel" [mode]="mode"></app-trainee-details>
   </ng-container>
 

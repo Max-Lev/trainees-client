@@ -1,6 +1,6 @@
-export const ADD_ACTIVE: string = '[ADD_ACTION] ADD_ACTIVE';
-export const ADD_DISABLED: string = '[ADD_ACTION] ADD_DISABLED';
-export const ADD_SAVE: string = '[ADD_ACTION] ADD_SAVE';
+export const ADD_ACTIVE_ACTION: string = '[ADD_ACTION] ADD_ACTIVE_ACTION';
+export const ADD_DISABLED_ACTION: string = '[ADD_ACTION] ADD_DISABLED_ACTION';
+export const ADD_SAVE_ACTION: string = '[ADD_ACTION] ADD_SAVE_ACTION';
 
 export interface IAddState {
     type: string;
@@ -8,11 +8,9 @@ export interface IAddState {
 }
 
 export class AddInitialState implements IAddState {
-    type: string = ADD_DISABLED;
-    payload?: any = {};
-    constructor() {
-
-    }
+    type: string = ADD_DISABLED_ACTION;
+    payload?: any;
+    constructor() { }
 }
 export class AddState implements IAddState {
     type: string;
@@ -25,5 +23,5 @@ export class AddState implements IAddState {
 
 
 export const AddActionsList = {
-    ADD_ACTIVE, ADD_DISABLED, ADD_SAVE
+    ADD_ACTIVE_ACTION, ADD_DISABLED_ACTION, ADD_SAVE_ACTION
 };

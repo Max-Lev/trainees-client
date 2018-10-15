@@ -30,15 +30,16 @@ export class TraineeDetailsComponent implements OnInit, OnChanges {
   ngOnInit() { };
 
   ngOnChanges(): void {
-    console.log(this.mode)
     this.viewItemFormatter();
   };
 
   viewItemFormatter() {
-    this.viewObj = { k: [], v: [] };
-    const propsList: string[] = Object.keys(this.activeTraineeModel);
-    propsList.filter((prop) => { this.viewObj.k.push(prop); });
-    this.ref.detectChanges();
+    if (this.activeTraineeModel !== undefined || null) {
+      this.viewObj = { k: [], v: [] };
+      const propsList: string[] = Object.keys(this.activeTraineeModel);
+      propsList.filter((prop) => { this.viewObj.k.push(prop); });
+      this.ref.detectChanges();
+    }
   };
 
   onChange(traineeModelChange: TraineesModel, value: string, prop: string) {
@@ -47,9 +48,9 @@ export class TraineeDetailsComponent implements OnInit, OnChanges {
       this.store.dispatch(new EditState(EditActionsList.EDIT_ACTIVE, traineeModelChange, value, prop));
     }
     else if (this.mode.state === modeOptions.addState) {
-      this.store.dispatch(new AddState(AddActionsList.ADD_ACTIVE, traineeModelChange));
+      this.store.dispatch(new AddState(AddActionsList.ADD_ACTIVE_ACTION, traineeModelChange));
     }
-    
+
   };
 
 }

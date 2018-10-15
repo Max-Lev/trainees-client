@@ -5,16 +5,16 @@ import { Store, select } from '@ngrx/store';
 import { FilterActionState, FilterActionList } from 'src/app/reducers/search-filter/filter.action';
 import { AppState } from 'src/app/reducers';
 import { UtilService } from 'src/app/views/data-container/services/util.service';
-import { IEditState } from 'src/app/reducers/edit/edit.actions';
 import { ITableDataContainer } from 'src/app/views/data-container/data-container.component';
 import { AddState, AddActionsList } from 'src/app/reducers/add/add.actions';
 import { ApiService } from 'src/app/views/data-container/services/api/api.service';
 import { RemoveState, RemoveActionsList } from 'src/app/reducers/remove/remove.actions';
+import { IModeState, ModeState, SAVEMODEACTIONTYPES, PanelModeState, PANELDETAILSACTIONTYPES, SaveModeState, REMOVEMODEACTIONTYPES, RemoveModeState } from 'src/app/reducers/mode/mode-reducer.actions';
 
 export const modeOptions = {
-  editState: 'editState',
-  addState: 'addState',
-  closed: 'closed',
+  editState: PANELDETAILSACTIONTYPES.PANEL_DETAILS_EDIT,
+  addState: PANELDETAILSACTIONTYPES.PANEL_DETAILS_SAVE,
+  closed: PANELDETAILSACTIONTYPES.PANEL_DETAILS_CLOSED,
   saveMode: { isSave: false }
 };
 
@@ -42,7 +42,33 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
 
   mode: any = { state: modeOptions.closed, saveMode: { isSave: false }, disabled: true };
 
-  constructor(private store: Store<AppState>, private apiService: ApiService, private ref: ChangeDetectorRef, private utilService: UtilService) { };
+  constructor(private store: Store<AppState>, private apiService: ApiService, private ref: ChangeDetectorRef, private utilService: UtilService) {
+
+    this.store.pipe(select('modeReducer')).subscribe((state: IModeState) => {
+
+      this.mode = Object.assign({}, this.mode, {
+        state: state.panelState.type,
+        disabled: state.removeState.payload.disabled,
+        saveMode: { isSave: state.saveState.payload.isSave }
+      });
+
+      if (state.saveState.type === SAVEMODEACTIONTYPES.SAVE_TRUE) {
+        state;
+        debugger;
+      }
+
+      // if (state.saveState.type === SAVEMODEACTIONTYPES.SAVE_TRUE) {
+      //   // this.activeTraineeModel = state.panelState.trainee;
+      //   // console.log(state.panelState.type)
+      //   const tempTrainee: TraineesModel = <TraineesModel>new Object({ id: ++this.addItemCounter });
+      //   this.activeTraineeModel = new TraineesModel(tempTrainee);
+      //   debugger;
+      //   this.addItemCounter = this.activeTraineeModel.id;
+      //   debugger;
+      // }
+      this.ref.markForCheck();
+    });
+  };
 
   ngOnInit() { };
 
@@ -74,12 +100,15 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
     if (this.editOpenIndex !== selecteRowIndex) {
       this.editOpenIndex = selecteRowIndex;
       this.activeTraineeModel = new TraineesModel(trainee);
-      this.mode = Object.assign({}, this.mode, { state: modeOptions.editState, saveMode: { isSave: false }, disabled: false });
+      this.store.dispatch(new ModeState(PANELDETAILSACTIONTYPES.PANEL_DETAILS_EDIT, new PanelModeState(PANELDETAILSACTIONTYPES.PANEL_DETAILS_EDIT, trainee),
+        new SaveModeState(SAVEMODEACTIONTYPES.SAVE_FALSE), new RemoveModeState(REMOVEMODEACTIONTYPES.REMOVE_FALSE)
+      ));
     } else {
       this.editOpenIndex = -1;
-      this.mode = Object.assign({}, this.mode, { state: modeOptions.closed, saveMode: { isSave: false }, disabled: true });
+      this.store.dispatch(new ModeState(PANELDETAILSACTIONTYPES.PANEL_DETAILS_CLOSED, new PanelModeState(PANELDETAILSACTIONTYPES.PANEL_DETAILS_CLOSED, this.activeTraineeModel),
+        new SaveModeState(SAVEMODEACTIONTYPES.SAVE_FALSE), new RemoveModeState(REMOVEMODEACTIONTYPES.REMOVE_TRUE)
+      ));
     }
-
   };
 
   removeTrainee() {
@@ -87,25 +116,36 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
     this.mode = Object.assign({}, this.mode, { disabled: true });
   };
 
+  @Output() save: EventEmitter<any> = new EventEmitter();
   addTrainee() {
     //reset mode
     if (!this.mode.saveMode.isSave) {
       this.apiService.getID().subscribe((response: any) => {
 
-        this.mode = Object.assign({}, this.mode, { state: modeOptions.addState, saveMode: { isSave: true }, disabled: true });
         this.addItemCounter = response.id;
         const tempTrainee: TraineesModel = <TraineesModel>new Object({ id: response.id });
         this.activeTraineeModel = new TraineesModel(tempTrainee);
-
+        this.store.dispatch(new ModeState(PANELDETAILSACTIONTYPES.PANEL_DETAILS_SAVE,
+          new PanelModeState(PANELDETAILSACTIONTYPES.PANEL_DETAILS_SAVE, this.activeTraineeModel),
+          new SaveModeState(SAVEMODEACTIONTYPES.SAVE_TRUE),
+          new RemoveModeState(REMOVEMODEACTIONTYPES.REMOVE_TRUE)
+        ));
         this.ref.markForCheck();
       });
     }
     //save mode
     else if (this.mode.saveMode.isSave) {
+
       if (this.activeTraineeModel.name !== '' && this.activeTraineeModel.name !== undefined) {
-        this.activeTraineeModel = Object.assign({}, this.activeTraineeModel, { id: ++this.addItemCounter });
-        this.store.dispatch(new AddState(AddActionsList.ADD_SAVE, this.activeTraineeModel));
-        this.activeTraineeModel = new TraineesModel(<TraineesModel>new Object({ id: this.addItemCounter }));
+
+        this.save.emit({ mode: 'Save', payload: this.activeTraineeModel });
+
+        const tempTrainee: TraineesModel = <TraineesModel>new Object({ id: ++this.addItemCounter });
+        this.activeTraineeModel = new TraineesModel(tempTrainee);
+        // this.store.dispatch(new AddState(AddActionsList.ADD_SAVE_ACTION, this.activeTraineeModel));
+        this.store.dispatch(new ModeState(SAVEMODEACTIONTYPES.SAVE_TRUE,
+          new PanelModeState(PANELDETAILSACTIONTYPES.PANEL_DETAILS_SAVE, this.activeTraineeModel), new SaveModeState(SAVEMODEACTIONTYPES.SAVE_TRUE),
+          new RemoveModeState(REMOVEMODEACTIONTYPES.REMOVE_TRUE)));
         this.ref.markForCheck();
       }
     }
