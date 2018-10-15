@@ -51,7 +51,7 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
         saveMode: { isSave: state.saveState.payload.isSave }
       });
 
-      if (state.saveState.type === SAVEMODEACTIONTYPES.SAVE_TRUE) {
+      if (state.saveState.type === SAVEMODEACTIONTYPES.SAVE_TRUE || state.panelState.type === PANELDETAILSACTIONTYPES.PANEL_DETAILS_EDIT) {
         const trainee: TraineesModel = state.panelState.trainee;
         this.activeTraineeModel = new TraineesModel(trainee);
         this.addItemCounter = this.activeTraineeModel.id;
@@ -105,7 +105,10 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
 
   removeTrainee() {
     this.store.dispatch(new RemoveState(RemoveActionsList.REMOVE_ACTIVE, this.activeTraineeModel));
-    this.mode = Object.assign({}, this.mode, { disabled: true });
+    this.store.dispatch(new ModeState(PANELDETAILSACTIONTYPES.PANEL_DETAILS_CLOSED, new
+      PanelModeState(PANELDETAILSACTIONTYPES.PANEL_DETAILS_CLOSED, this.activeTraineeModel),
+      new SaveModeState(SAVEMODEACTIONTYPES.SAVE_FALSE), new RemoveModeState(REMOVEMODEACTIONTYPES.REMOVE_DISABLED)
+    ));
   };
 
   @Output() save: EventEmitter<any> = new EventEmitter();
@@ -134,7 +137,6 @@ export class TableComponent implements OnInit, AfterViewInit, OnChanges {
 
         const tempTrainee: TraineesModel = <TraineesModel>new Object({ id: ++this.addItemCounter });
         this.activeTraineeModel = new TraineesModel(tempTrainee);
-        // this.store.dispatch(new AddState(AddActionsList.ADD_SAVE_ACTION, this.activeTraineeModel));
         this.store.dispatch(new ModeState(SAVEMODEACTIONTYPES.SAVE_TRUE,
           new PanelModeState(PANELDETAILSACTIONTYPES.PANEL_DETAILS_SAVE, this.activeTraineeModel), new SaveModeState(SAVEMODEACTIONTYPES.SAVE_TRUE),
           new RemoveModeState(REMOVEMODEACTIONTYPES.REMOVE_DISABLED)));
