@@ -1,0 +1,36 @@
+<section class="trainee-details-container">
+  <mat-card>
+
+    <mat-list dense>
+
+      <mat-list-item>
+        Details
+      </mat-list-item>
+
+      <mat-list-item *ngFor="let prop of viewObj.k;let i = index;" (click)="index=i">
+
+        <!-- display mode -->
+        <ng-container *ngIf="index!==i">
+          {{prop | titlecase}}:{{activeTraineeModel[prop]}}
+        </ng-container>
+        <!-- display mode -->
+
+        <!-- edit mode -->
+        <ng-container *ngIf="index!==0 && index===i">
+          <mat-form-field>
+            <input matInput [placeholder]="prop" (ngModelChange)="onChange(activeTraineeModel,$event,prop)" [(ngModel)]="activeTraineeModel[prop]">
+          </mat-form-field>
+        </ng-container>
+        <!-- edit mode -->
+
+        <!-- disable edit ID -->
+        <ng-container *ngIf="index===0 && index===i">
+          {{prop | titlecase}}:{{activeTraineeModel[prop]}}
+        </ng-container>
+        <!-- disable edit ID -->
+      </mat-list-item>
+
+    </mat-list>
+
+  </mat-card>
+</section>

@@ -1,20 +1,9 @@
 <mat-card class="actions-card-container">
+
   <form novalidate>
 
-    <section class="search-container">
-
-      <span class="search-title">Filter</span>
-      <mat-form-field>
-        <input matInput placeholder="ID:###">
-      </mat-form-field>
-
-      <button type="button" matButton mat-stroked-button>Add</button>
-
-      <button type="button" mat-stroked-button>Remove</button>
-
-    </section>
-
-    <app-table></app-table>
+    <app-table (save)="saveHandler($event)" [tableDataContainer]="tableDataContainer"></app-table>
 
   </form>
+
 </mat-card>

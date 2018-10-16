@@ -1,4 +1,37 @@
 app-table {
     display: flex;
     flex-direction: column;
+    flex: 1;
+    .search-container {
+        display: flex;
+        align-items: baseline;
+        align-self: center;
+        width: 100%;
+        place-content: center;
+        flex: 1;
+        .search-title {
+            padding: 0 .5rem;
+        }
+        button[type="button"] {
+            margin-left: .5rem;
+        }
+    }
+}
+
+app-table {
+    .layout-container {
+        display: flex;
+        width: 100%;
+    }
+}
+
+app-table {
+    .table-container {
+        display: flex;
+        flex-direction: row;
+        flex: 1;
+        table {
+            width: 100%;
+        }
+    }
 }

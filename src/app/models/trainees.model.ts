@@ -1,29 +1,39 @@
 export interface ITrainees {
-    Id: number;
-    Name: string;
-    Date: string;
-    Grade: number;
-    Subject: string;
-    Email: string;
-    Address: string;
-    City: string;
-    Country: string;
-    Zip: number;
+    id?: number;
+    name: string;
+    date: string;
+    grade: number;
+    subject: string;
+    email: string;
+    address: string;
+    city: string;
+    country: string;
+    zip: number;
 };
 
 export class TraineesModel implements ITrainees {
-    Id: number;
-    Name: string;
-    Date: string;
-    Grade: number;
-    Subject: string;
-    Email: string;
-    Address: string;
-    City: string;
-    Country: string;
-    Zip: number;
-    constructor({ ...model }: TraineesModel) {
-        console.log(this);
-    }
+    id?: number;
+    name: string;
+    date: string;
+    grade: number;
+    subject: string;
+    email: string;
+    address: string;
+    city: string;
+    country: string;
+    zip: number;
+    constructor(model?: TraineesModel) {
+        this.id = model['id'];
+        this.name = model['name'];
+        this.date = model['date'];
+        this.grade = model['grade'];
+        this.subject = model['subject'];
+        this.email = model['email'];
+        this.address = model['address'];
+        this.city = model['city'];
+        this.country = model['country'];
+        this.zip = model['zip'];
+    };
+
 
 }

@@ -1,29 +1,58 @@
-<table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+<section class="search-container">
+  <span class="search-title">Filter</span>
+  <mat-form-field>
+    <input matInput (keyup)="searchKeyUp($event.target.value)" placeholder="ID:###" [(ngModel)]="tableDataContainer.filterValue">
+  </mat-form-field>
+  <button (click)="addTrainee()" type="button" matButton mat-stroked-button>Add</button>
+  <button (click)="removeTrainee()" [disabled]="mode.disabled" type="button" mat-stroked-button>Remove</button>
+</section>
 
-  <!-- Position Column -->
-  <ng-container matColumnDef="position">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> No. </th>
-    <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+<section class="layout-container">
+
+  <section class="table-container">
+
+    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+
+      <!-- ID Column -->
+      <ng-container matColumnDef="Id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ID</th>
+        <td mat-cell *matCellDef="let element"> {{element.id}}</td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="Name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+      </ng-container>
+
+      <!-- Date Column -->
+      <ng-container matColumnDef="Date">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
+        <td mat-cell *matCellDef="let element"> {{element.date}} </td>
+      </ng-container>
+
+      <!-- Grade Column -->
+      <ng-container matColumnDef="Grade">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Grade </th>
+        <td mat-cell *matCellDef="let element"> {{element.grade}} </td>
+      </ng-container>
+
+      <!-- Subject Column -->
+      <ng-container matColumnDef="Subject">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Subject </th>
+        <td mat-cell *matCellDef="let element"> {{element.subject}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr (click)="editTraineeDetails(row,i)" mat-row *matRowDef="let row; columns: displayedColumns;let i = index;"></tr>
+
+    </table>
+
+  </section>
+
+  <!-- details panel -->
+  <ng-container *ngIf="mode.state==='[PANEL_DETAILS] PANEL_DETAILS_EDIT' || mode.state==='[PANEL_DETAILS] PANEL_DETAILS_SAVE'">
+    <app-trainee-details [activeTraineeModel]="activeTraineeModel" [mode]="mode"></app-trainee-details>
   </ng-container>
 
-  <!-- Name Column -->
-  <ng-container matColumnDef="name">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
-    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-  </ng-container>
-
-  <!-- Weight Column -->
-  <ng-container matColumnDef="weight">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Weight </th>
-    <td mat-cell *matCellDef="let element"> {{element.weight}} </td>
-  </ng-container>
-
-  <!-- Symbol Column -->
-  <ng-container matColumnDef="symbol">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Symbol </th>
-    <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
-  </ng-container>
-
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-</table>
+</section>
