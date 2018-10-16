@@ -78,9 +78,9 @@ export class DataContainerComponent implements OnInit, AfterViewInit {
   editState$() {
     this.store.pipe(select('editReducer')).subscribe((state: EditState) => {
 
-      const dataSource: TraineesModel[] = this.tableDataContainer.traineesDataSource.map((item) => {
+      const dataSource: TraineesModel[] = this.tableDataContainer.traineesDataSource.map((item:TraineesModel) => {
 
-        if (item.id === state.payload.id) {
+        if (item.id === state.payload['id']) {
           item = Object.assign({}, item, { [state.prop]: state.value });
           return item;
         }
